@@ -1,28 +1,26 @@
 <?php
 /*
 Plugin Name: Add to Homescreen - Standalone mode for Apple and Android Devices
+Plugin URI: https://github.com/lsteel/Add-to-Homescreen
 Description: This plugin adds the meta tags needed to allow mobile devices like iPhones and Androids to add sites to the homescreen and have the weblinks use the site as a standalone mobile app, removing the normal browser interface.
-Version: 1.0
+Version: 1.01
 Author: Lotion Starlord
 Author URI: https://lotionstarlord.com
 License: GPL2
 */
 
 function ath_register_settings() {
-  add_option( 'ath_option_background_color', 'transparent');
-  register_setting( 'ath_options_group', 'ath_option_background_color', 'ath_callback' );
-  add_option( 'ath_option_ios_padding', '22');
-  register_setting( 'ath_options_group', 'ath_option_ios_padding', 'ath_callback' );
+  register_setting( 'ath_options_group', 'ath_option_background_color' );
+  register_setting( 'ath_options_group', 'ath_option_ios_padding' );
 }
 
-function ath_setup_menu() {
-  add_menu_page( 'Add to Homescreen Page', 'Add to Homescreen', 'manage_options', 'add-to-homescreen', 'ath_setup_init' );
+function ath_register_options_page() {
+  add_options_page( 'Add to Homescreen Page', 'Add to Homescreen', 'manage_options', 'add-to-homescreen', 'ath_setup_init' );
 }
 
 function ath_setup_init() {
   ?>
-  <div>
-    <?php screen_icon(); ?>
+  <div class="wrap">
     <h1>Add to Homescreen - Settings</h1>
     <p>Here you can customize settings for standalone mode.</p>
     <br>
@@ -34,6 +32,7 @@ function ath_setup_init() {
       <br><br>
       <label for="ath_option_background_color">Background Color:</label><br>
       <input type="text" id="ath_option_background_color" name="ath_option_background_color" value="<?php echo get_option('ath_option_background_color'); ?>" />
+      <?php do_settings_sections( 'ath_options_group-group' ); ?>
       <?php  submit_button(); ?>
     </form>
     <br><br><br>
@@ -89,8 +88,14 @@ function ls_add_to_homescreen_footer() {
   <?php
 }
 
-add_action( 'admin_init', 'ath_register_settings' );
-add_action( 'admin_menu', 'ath_setup_menu');
+if ( is_admin() ){ // admin actions
+  add_action( 'admin_menu', 'ath_register_options_page' );
+  add_action( 'admin_init', 'ath_register_settings' );
+}
+else {
+  // non-admin enqueues, actions, and filters
+}
+
 add_action( 'wp_head', 'ls_add_to_homescreen_header', 100 );
 add_action( 'wp_footer', 'ls_add_to_homescreen_footer', 100 );
 ?>
