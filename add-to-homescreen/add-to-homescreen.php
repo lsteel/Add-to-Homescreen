@@ -15,7 +15,7 @@ function ath_register_settings() {
 }
 
 function ath_register_options_page() {
-  add_options_page( 'Add to Homescreen Page', 'Add to Homescreen', 'manage_options', 'add-to-homescreen', 'ath_setup_init' );
+  add_options_page( 'Add to Homescreen Page', 'Add to Homescreen', 'manage_options', 'add-to-homescreen-plugin', 'ath_setup_init' );
 }
 
 function ath_setup_init() {
@@ -26,13 +26,13 @@ function ath_setup_init() {
     <br>
     <form method="post" action="options.php">
       <?php settings_fields( 'ath_options_group' ); ?>
+      <?php do_settings_sections( 'ath_options_group' ); ?>
       <h3>iOS Settings</h3>
       <label for="ath_option_ios_padding">iOS Padding:</label><br>
       <input type="text" id="ath_option_ios_padding" name="ath_option_ios_padding" value="<?php echo get_option('ath_option_ios_padding') ?>" />
       <br><br>
       <label for="ath_option_background_color">Background Color:</label><br>
       <input type="text" id="ath_option_background_color" name="ath_option_background_color" value="<?php echo get_option('ath_option_background_color'); ?>" />
-      <?php do_settings_sections( 'ath_options_group-group' ); ?>
       <?php  submit_button(); ?>
     </form>
     <br><br><br>
